@@ -1,7 +1,6 @@
 use std::ops;
 use std::fmt;
 
-// TODO: Error checking and return with Ok/Error
 
 pub struct Vector {
     data_: Vec<f64>,
@@ -21,6 +20,47 @@ impl Vector {
             dim_: dim,
             data_: vec![0.0; dim],
         }
+    }
+
+    pub fn add(&mut self, other: &Vector) -> Result<Vector, String>{
+        if other.dim() != self.dim() {
+            return Err("Vector dimensions do not match".to_string())
+        }
+        let mut result = Vec::new();
+        for i in 0..self.dim_ {
+            result.push(self.data_[i] + other.data_[i]);
+        }
+        Ok(Vector::from(result))
+    }
+
+    pub fn sub(&mut self, other: &Vector) -> Result<Vector, String>{
+        if other.dim() != self.dim() {
+            return Err("Vector dimensions do not match".to_string())
+        }
+        let mut result = Vec::new();
+        for i in 0..self.dim_ {
+            result.push(self.data_[i] - other.data_[i]);
+        }
+        Ok(Vector::from(result))
+    }
+
+    pub fn mul(&mut self, other: &Vector) -> Result<f64, String>{
+        if other.dim() != self.dim() {
+            return Err("Vector dimensions do not match".to_string())
+        }
+        let mut result = 0.0;
+        for i in 0..self.dim_ {
+            result += self.data_[i] * other.data_[i];
+        }
+        Ok(result)
+    }
+
+    pub fn scale(&mut self, other: f64) -> Result<Vector, String>{
+        let mut result = Vec::new();
+        for i in 0..self.dim_ {
+            result.push(self.data_[i] * other);
+        }
+        Ok(Vector::from(result))
     }
 
     pub fn to_string(&self) -> String {
